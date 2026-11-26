@@ -22,5 +22,20 @@ namespace AdServiceAPI.Controllers
             return Ok(await _dbContext.Ads.ToListAsync());
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Ad>> GetOne(int id)
+        {
+            var ad = await _dbContext.Ads.FirstOrDefaultAsync(
+                a => a.Id == id);
+
+            if (ad == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ad);
+        }
+
+
     }
 }
