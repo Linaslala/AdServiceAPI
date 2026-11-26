@@ -36,6 +36,23 @@ namespace AdServiceAPI.Controllers
             return Ok(ad);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<Ad>> PostAd(NewAd newAd)
+        {
+            Ad ad = new Ad { 
+                Title = newAd.Title, 
+                Product = newAd.Product,
+                Price = newAd.Price, 
+                StartDate = newAd.StartDate,
+                EndDate = newAd.EndDate
+            };
+
+            _dbContext.Ads.Add(ad);
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetOne), new { id = ad.Id }, ad);
+        }
+
 
     }
 }
