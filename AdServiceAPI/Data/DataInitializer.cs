@@ -44,7 +44,7 @@ namespace AdServiceAPI.Data
                     Title = "Balla brallor",
                     Product = "Byxa",
                     Price = 900,
-                    StartDate = today.AddDays(5),
+                    StartDate = today,
                     EndDate = today.AddDays(12),
                 });
             }
