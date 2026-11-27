@@ -1,7 +1,6 @@
 ﻿using AdServiceAPI.Ads;
-using AdServiceAPI.Data;
+using AdServiceAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AdServiceAPI.Controllers
 {
@@ -9,25 +8,24 @@ namespace AdServiceAPI.Controllers
     [ApiController]
     public class AdsController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IAdService _adService;
 
-        public AdsController(ApplicationDbContext dbContext)
+        public AdsController(IAdService adService)
         {
-            _dbContext = dbContext;
+            _adService = adService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Ad>>> GetAll()
         {
-            return Ok(await _dbContext.Ads.ToListAsync());
+            return Ok(await _adService.GetAll());
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Ad>> GetOne(int id)
         {
-            var ad = await _dbContext.Ads.FirstOrDefaultAsync(
-                a => a.Id == id);
-
+            var ad = await _adService.GetOne(id);
+               
             if (ad == null)
             {
                 return NotFound();
@@ -39,17 +37,7 @@ namespace AdServiceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Ad>> PostAd(NewAd newAd)
         {
-            Ad ad = new Ad
-            {
-                Title = newAd.Title,
-                Product = newAd.Product,
-                Price = newAd.Price,
-                StartDate = newAd.StartDate,
-                EndDate = newAd.EndDate
-            };
-
-            _dbContext.Ads.Add(ad);
-            await _dbContext.SaveChangesAsync();
+            var ad = await _adService.PostAd(newAd);
 
             return CreatedAtAction(nameof(GetOne), new { id = ad.Id }, ad);
         }
@@ -57,19 +45,12 @@ namespace AdServiceAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Ad>> PutAd(int id, UpdateAd ad)
         {
-            var adToUpdate = await _dbContext.Ads.FirstOrDefaultAsync(s => s.Id == id);
+            var adToUpdate = await _adService.PutAd(id, ad);
 
             if (adToUpdate == null)
             {
                 return NotFound();
             }
-            adToUpdate.Title = ad.Title;
-            adToUpdate.Product = ad.Product;
-            adToUpdate.Price = ad.Price;
-            adToUpdate.StartDate = ad.StartDate;
-            adToUpdate.EndDate = ad.EndDate;
-
-            await _dbContext.SaveChangesAsync();
 
             return Ok(adToUpdate);
         }
@@ -77,18 +58,14 @@ namespace AdServiceAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteAd(int id)
         {
-            var ad = await _dbContext.Ads.FirstOrDefaultAsync(a => a.Id == id);
+            var ad = await _adService.DeleteAd(id);
             
             if (ad == null) 
             { 
                 return NotFound(); 
             }
-            _dbContext.Ads.Remove(ad);
-
-            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
-
     }
 }

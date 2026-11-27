@@ -63,6 +63,7 @@ namespace AdServiceAPI.Services
             {
                 return null;
             }
+
             _dbContext.Ads.Remove(ad);
 
             await _dbContext.SaveChangesAsync();
