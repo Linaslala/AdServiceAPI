@@ -86,6 +86,7 @@ namespace AdServiceAPI.Controllers
             _dbContext.Ads.Remove(ad);
 
             await _dbContext.SaveChangesAsync();
+
             return NoContent();
         }
 
