@@ -58,4 +58,22 @@ DELETE {{AdServiceAPI_HostAddress}}/Ads/7
 
 ###
 
-DELETE {{AdServiceAPI_HostAddress}}/Ads/7
+PATCH {{AdServiceAPI_HostAddress}}/Ads/1
+Content-Type: application/json
+
+[ { "op": "replace", "path": "/price", "value": 200 } ]
+
+###
+
+PATCH {{AdServiceAPI_HostAddress}}/Ads/56
+Content-Type: application/json
+
+[ { "op": "replace", "path": "/price", "value": 300 } ]
+
+###
+
+PATCH {{AdServiceAPI_HostAddress}}/Ads/1
+Content-Type: application/json
+
+[ { "op": "replace", "path": "/price", "value": -5 } ]
+
