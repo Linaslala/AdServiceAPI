@@ -39,10 +39,11 @@ namespace AdServiceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Ad>> PostAd(NewAd newAd)
         {
-            Ad ad = new Ad { 
-                Title = newAd.Title, 
+            Ad ad = new Ad
+            {
+                Title = newAd.Title,
                 Product = newAd.Product,
-                Price = newAd.Price, 
+                Price = newAd.Price,
                 StartDate = newAd.StartDate,
                 EndDate = newAd.EndDate
             };
@@ -53,6 +54,24 @@ namespace AdServiceAPI.Controllers
             return CreatedAtAction(nameof(GetOne), new { id = ad.Id }, ad);
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<Ad>> PutAd(int id, UpdateAd ad)
+        {
+            var adToUpdate = await _dbContext.Ads.FirstOrDefaultAsync(s => s.Id == id);
 
+            if (adToUpdate == null)
+            {
+                return NotFound();
+            }
+            adToUpdate.Title = ad.Title;
+            adToUpdate.Product = ad.Product;
+            adToUpdate.Price = ad.Price;
+            adToUpdate.StartDate = ad.StartDate;
+            adToUpdate.EndDate = ad.EndDate;
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(adToUpdate);
+        }
     }
 }
