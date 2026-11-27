@@ -1,5 +1,6 @@
 
 using AdServiceAPI.Data;
+using AdServiceAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdServiceAPI
@@ -20,6 +21,7 @@ namespace AdServiceAPI
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddTransient<DataInitializer>();
+            builder.Services.AddScoped<IAdService, AdService>();
 
             var app = builder.Build();
 
