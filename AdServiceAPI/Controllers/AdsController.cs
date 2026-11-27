@@ -1,5 +1,6 @@
 ﻿using AdServiceAPI.Ads;
 using AdServiceAPI.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdServiceAPI.Controllers
@@ -25,7 +26,7 @@ namespace AdServiceAPI.Controllers
         public async Task<ActionResult<Ad>> GetOne(int id)
         {
             var ad = await _adService.GetOne(id);
-               
+
             if (ad == null)
             {
                 return NotFound();
@@ -59,13 +60,44 @@ namespace AdServiceAPI.Controllers
         public async Task<ActionResult> DeleteAd(int id)
         {
             var ad = await _adService.DeleteAd(id);
-            
-            if (ad == null) 
-            { 
-                return NotFound(); 
+
+            if (ad == null)
+            {
+                return NotFound();
             }
 
             return NoContent();
+        }
+
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult<Ad>> PatchAd(int id, JsonPatchDocument<UpdateAd> patchDoc)
+        {
+            var ad = await _adService.GetOne(id);
+
+            if (ad == null)
+            {
+                return NotFound();
+            }
+
+            var updateAd = new UpdateAd
+            {
+                Title = ad.Title,
+                Product = ad.Product,
+                Price = ad.Price,
+                StartDate = ad.StartDate,
+                EndDate = ad.EndDate
+            };
+
+            patchDoc.ApplyTo(updateAd);
+
+            if (!TryValidateModel(updateAd))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            var savedAd = await _adService.PutAd(id, updateAd);
+
+            return Ok(savedAd);
         }
     }
 }
