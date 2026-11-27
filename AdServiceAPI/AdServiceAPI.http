@@ -1,6 +1,61 @@
 @AdServiceAPI_HostAddress = http://localhost:5254
 
-GET {{AdServiceAPI_HostAddress}}/weatherforecast/
+GET {{AdServiceAPI_HostAddress}}/Ads/
 Accept: application/json
 
 ###
+
+GET {{AdServiceAPI_HostAddress}}/Ads/1/
+Accept: application/json
+
+###
+
+GET {{AdServiceAPI_HostAddress}}/Ads/56/
+Accept: application/json
+
+###
+
+POST {{AdServiceAPI_HostAddress}}/Ads/
+Content-Type: application/json
+
+{
+  "title": "Koll på tiden",
+  "product": "Klocka",
+  "price": 15000,
+  "startDate": "2026-11-30",
+  "endDate": "2026-12-15"
+}
+
+###
+
+PUT {{AdServiceAPI_HostAddress}}/Ads/6
+Content-Type: application/json
+
+{
+  "title": "Go bananas",
+  "product": "Bananshake",
+  "price": 40,
+  "startDate": "2026-11-25",
+  "endDate": "2026-12-15"
+}
+
+###
+
+PUT {{AdServiceAPI_HostAddress}}/Ads/56
+Content-Type: application/json
+
+{
+  "title": "Go bananas",
+  "product": "Bananshake",
+  "price": 40,
+  "startDate": "2026-11-25",
+  "endDate": "2026-12-15"
+}
+
+###
+
+DELETE {{AdServiceAPI_HostAddress}}/Ads/7
+
+###
+
+DELETE {{AdServiceAPI_HostAddress}}/Ads/7
