@@ -73,5 +73,21 @@ namespace AdServiceAPI.Controllers
 
             return Ok(adToUpdate);
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteAd(int id)
+        {
+            var ad = await _dbContext.Ads.FirstOrDefaultAsync(a => a.Id == id);
+            
+            if (ad == null) 
+            { 
+                return NotFound(); 
+            }
+            _dbContext.Ads.Remove(ad);
+
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
+        }
+
     }
 }
