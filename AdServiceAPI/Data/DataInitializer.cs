@@ -21,7 +21,7 @@ namespace AdServiceAPI.Data
 
         public void SeedData()
         {
-            var today = DateTime.Today;
+            var today = DateOnly.FromDateTime(DateTime.Now);
 
             if (!_dbContext.Ads.Any(
                 a => a.Title == "Skobonanza"))
